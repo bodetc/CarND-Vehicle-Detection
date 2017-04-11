@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
-import vehicle_detection.lesson_functions as lesson_functions
+import vehicle_detection.features as features
 import vehicle_detection.util as util
 
 images, labels = util.load_images('data')
@@ -17,8 +17,8 @@ histbin = 32
 spatial_feat = True  # Spatial features on or off
 hist_feat = True  # Histogram features on or off
 
-X = lesson_functions.extract_features(images, color_space='RGB', spatial_size=(spatial, spatial), hist_bins=histbin,
-                                      spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=False)
+X = features.extract_features(images, color_space='RGB', spatial_size=(spatial, spatial), hist_bins=histbin,
+                              spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=False)
 
 # Fit a per-column scaler
 X_scaler = StandardScaler().fit(X)
@@ -33,7 +33,7 @@ rand_state = np.random.randint(0, 100)
 X_train, X_test, y_train, y_test = train_test_split(
     scaled_X, y, test_size=0.2, random_state=rand_state)
 
-print('Using spatial binning of:', spatial,'and', histbin, 'histogram bins')
+print('Using spatial binning of:', spatial, 'and', histbin, 'histogram bins')
 print('Feature vector length:', len(X_train[0]))
 # Use a linear SVC
 svc = LinearSVC()
