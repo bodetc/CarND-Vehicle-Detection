@@ -1,7 +1,9 @@
 import glob
+
 import numpy as np
 
-def load_images(folder = 'data'):
+
+def load_images(folder='data'):
     # Read in car and non-car images
     cars = []
     files = glob.glob(folder + '/vehicles/*/*.png')
