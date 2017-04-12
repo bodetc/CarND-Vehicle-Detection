@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
-from matplotlib import image as mpimg
 from skimage.feature import hog
+
+from vehicle_detection.util import load_image
 
 
 class FeatureExtractor:
@@ -113,9 +114,7 @@ class FeatureExtractor:
         # Iterate through the list of images
         for file in imgs:
             # Read in each one by one
-            image = mpimg.imread(file)
-            if '.png' in file:
-                image *= 255.
+            image = load_image(file)
 
             file_features = self.extract_image_features(image)
             features.append(file_features)

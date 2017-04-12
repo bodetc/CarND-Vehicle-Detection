@@ -20,7 +20,7 @@ pix_per_cell = 8  # HOG pixels per cell
 cell_per_block = 2  # HOG cells per block
 hog_channel = 0  # Can be 0, 1, 2, or "ALL"
 
-images, labels = util.load_images('data')
+images, labels = util.load_training_images('data')
 
 feature_extractor = FeatureExtractor(color_space=color_space,
                                      spatial_feat=spatial_feat, spatial_size=(spatial, spatial),

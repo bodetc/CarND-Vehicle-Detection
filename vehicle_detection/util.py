@@ -1,9 +1,10 @@
 import glob
 
 import numpy as np
+from matplotlib import image as mpimg
 
 
-def load_images(folder='data'):
+def load_training_images(folder='data'):
     # Read in car and non-car images
     cars = []
     files = glob.glob(folder + '/vehicles/*/*.png')
@@ -24,3 +25,21 @@ def load_images(folder='data'):
     labels = np.hstack((np.ones(n_cars), np.zeros(n_notcars)))
 
     return images, labels
+
+
+def load_test_images(folder='test_images'):
+    images = []
+    files = glob.glob(folder + '/*.jpg')
+    for file in files:
+        images.append(file)
+
+    return images
+
+
+def load_image(filename):
+    # Read in each one by one
+    image = mpimg.imread(filename)
+    if '.png' in filename:
+        image *= 255.
+
+    return image
