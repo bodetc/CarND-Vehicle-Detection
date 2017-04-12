@@ -34,15 +34,22 @@ scaler = prepare_and_train_model(model, feature_extractor)
 
 window_search = WindowSearch(model, scaler, feature_extractor)
 
+
+def process_image(image):
+    draw_image = np.copy(image)
+    hot_windows = window_search.search_image(image)
+    window_img = draw_boxes(draw_image, hot_windows, color=(0, 0, 255), thick=6)
+
+    return window_img
+
+
 images = load_test_images(folder='test_images')
 for file in images:
     image = load_image(file)
-    draw_image = np.copy(image)
 
-    hot_windows = window_search.search_image(image)
-
-    window_img = draw_boxes(draw_image, hot_windows, color=(0, 0, 255), thick=6)
-
+    window_img = process_image(image)
     plt.imshow(window_img)
 
     plt.show()
+
+process_video('project_video.mp4', 'tests/project_video.mp4', process_image)

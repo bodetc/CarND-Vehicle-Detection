@@ -14,6 +14,8 @@ class WindowSearch:
         [384, [360, 630]],
     ]
 
+    n_windows = None
+
     def __init__(self, classifier, scaler, feature_extractor):
         self.classifier = classifier
         self.scaler = scaler
@@ -93,7 +95,9 @@ class WindowSearch:
             windows = WindowSearch.__slide_window(image, y_start_stop=y_start_stop, xy_window=(size, size))
             all_windows.extend(windows)
 
-        print('Searching a total of', len(all_windows), 'windows')
+        if self.n_windows is None:
+            self.n_windows = len(all_windows)
+            print('Searching a total of', self.n_windows, 'windows')
 
         hot_windows = self.__search_windows(image, all_windows)
 

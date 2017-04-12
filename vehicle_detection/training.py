@@ -47,3 +47,5 @@ def prepare_and_train_model(model, feature_extractor, training_data_folder='data
     print('Feature vector length:', len(X_train[0]))
 
     train_model(model, X_train, y_train, X_test, y_test)
+
+    return X_scaler
