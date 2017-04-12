@@ -9,41 +9,19 @@ from sklearn.svm import LinearSVC
 from vehicle_detection.features import FeatureExtractor
 from vehicle_detection.lesson_functions import *
 from vehicle_detection.util import *
-
-
-# Define a function you will pass an image
-# and the list of windows to be searched (output of slide_windows())
-def search_windows(img, windows, clf, scaler, feature_extractor):
-    # 1) Create an empty list to receive positive detection windows
-    on_windows = []
-    # 2) Iterate over all windows in the list
-    for window in windows:
-        # 3) Extract the test window from original image
-        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))
-        # 4) Extract features for that window using single_img_features()
-        features = feature_extractor.extract_image_features(test_img)
-        # 5) Scale extracted features to be fed to classifier
-        test_features = scaler.transform(np.array(features).reshape(1, -1))
-        # 6) Predict using your classifier
-        prediction = clf.predict(test_features)
-        # 7) If positive (prediction == 1) then save the window
-        if prediction == 1:
-            on_windows.append(window)
-    # 8) Return windows for positive detections
-    return on_windows
+from vehicle_detection.windows import WindowSearch
 
 
 color_space = 'RGB'  # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
-spatial_feat = False  # Spatial features on or off
-spatial = 8  # Spatial binning dimension
-hist_feat = False  # Histogram features on or off
-hist_bins = 32  # Number of histogram bins
+spatial_feat = True  # Spatial features on or off
+spatial = 16  # Spatial binning dimension
+hist_feat = True  # Histogram features on or off
+hist_bins = 16  # Number of histogram bins
 hog_feat = True  # HOG features on or off
 orient = 9  # HOG orientations
 pix_per_cell = 8  # HOG pixels per cell
 cell_per_block = 2  # HOG cells per block
 hog_channel = 0  # Can be 0, 1, 2, or "ALL"
-y_start_stop = [None, None]  # Min and max in y to search in slide_window()
 
 images, labels = load_training_images('data')
 
@@ -72,7 +50,7 @@ print('Using:', orient, 'orientations', pix_per_cell,
       'pixels per cell and', cell_per_block, 'cells per block')
 print('Feature vector length:', len(X_train[0]))
 # Use a linear SVC
-svc = LinearSVC()
+svc = LinearSVC(C=0.1)
 # Check the training time for the SVC
 t = time.time()
 svc.fit(X_train, y_train)
@@ -86,19 +64,13 @@ t = time.time()
 
 images = load_test_images(folder='test_images')
 
+window_search = WindowSearch(svc, X_scaler, feature_extractor)
+
 for file in images:
     image = load_image(file)
     draw_image = np.copy(image)
 
-    # Uncomment the following line if you extracted training
-    # data from .png images (scaled 0 to 1 by mpimg) and the
-    # image you are searching is a .jpg (scaled 0 to 255)
-    # image = image.astype(np.float32)/255
-
-    windows = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop,
-                           xy_window=(96, 96), xy_overlap=(0.5, 0.5))
-
-    hot_windows = search_windows(image, windows, svc, X_scaler, feature_extractor)
+    hot_windows = window_search.search_image(image)
 
     window_img = draw_boxes(draw_image, hot_windows, color=(0, 0, 255), thick=6)
 
