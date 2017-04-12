@@ -2,6 +2,7 @@ import glob
 
 import numpy as np
 from matplotlib import image as mpimg
+from moviepy.editor import VideoFileClip
 
 
 def load_training_images(folder='data'):
@@ -43,9 +44,6 @@ def load_image(filename):
         image *= 255.
 
     return image
-
-
-from moviepy.editor import VideoFileClip
 
 
 def process_video(input_file, output_file, function):

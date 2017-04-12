@@ -30,7 +30,7 @@ class FeatureExtractor:
         self.hog_feat = hog_feat
 
     # Define a function to return HOG features and visualization
-    def get_hog_features(self, img, vis=False, feature_vec=True):
+    def __get_hog_features(self, img, vis=False, feature_vec=True):
         # Call with two outputs if vis==True
         if vis == True:
             features, hog_image = hog(img, orientations=self.orient,
@@ -49,15 +49,14 @@ class FeatureExtractor:
             return features
 
     # Define a function to compute binned color features
-    def bin_spatial(self, img):
+    def __bin_spatial(self, img):
         # Use cv2.resize().ravel() to create the feature vector
         features = cv2.resize(img, self.spatial_size).ravel()
         # Return the feature vector
         return features
 
     # Define a function to compute color histogram features
-    # NEED TO CHANGE bins_range if reading .png files with mpimg!
-    def color_hist(self, img, bins_range=(0, 256)):
+    def __color_hist(self, img, bins_range=(0, 256)):
         # Compute the histogram of the color channels separately
         channel1_hist = np.histogram(img[:, :, 0], bins=self.hist_bins, range=bins_range)
         channel2_hist = np.histogram(img[:, :, 1], bins=self.hist_bins, range=bins_range)
@@ -84,23 +83,24 @@ class FeatureExtractor:
         else:
             feature_image = np.copy(image)
 
-        if self.spatial_feat == True:
-            spatial_features = self.bin_spatial(feature_image)
+        if self.spatial_feat:
+            spatial_features = self.__bin_spatial(feature_image)
             file_features.append(spatial_features)
-        if self.hist_feat == True:
+        if self.hist_feat:
             # Apply color_hist()
-            hist_features = self.color_hist(feature_image)
+            hist_features = self.__color_hist(feature_image)
             file_features.append(hist_features)
-        if self.hog_feat == True:
+        if self.hog_feat:
             # Call get_hog_features() with vis=False, feature_vec=True
             if self.hog_channel == 'ALL':
                 hog_features = []
                 for channel in range(feature_image.shape[2]):
                     hog_features.append(
-                        self.get_hog_features(feature_image[:, :, channel], vis=False, feature_vec=True))
+                        self.__get_hog_features(feature_image[:, :, channel], vis=False, feature_vec=True))
                 hog_features = np.ravel(hog_features)
             else:
-                hog_features = self.get_hog_features(feature_image[:, :, self.hog_channel], vis=False, feature_vec=True)
+                hog_features = self.__get_hog_features(feature_image[:, :, self.hog_channel], vis=False,
+                                                       feature_vec=True)
             # Append the new feature vector to the features list
             file_features.append(hog_features)
 
