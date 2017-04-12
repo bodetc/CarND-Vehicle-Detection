@@ -9,19 +9,11 @@ from sklearn.svm import LinearSVC
 import vehicle_detection.util as util
 from vehicle_detection.features import FeatureExtractor
 
-# TODO play with these values to see how your classifier
-# performs under different binning scenarios
-# color_space = 'LUV'
-# spatial = 8
-# histbin = 32
-# spatial_feat = False  # Spatial features on or off
-# hist_feat = True  # Histogram features on or off
-
-color_space = 'RGB'  # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+color_space = 'LUV'  # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 spatial_feat = True  # Spatial features on or off
-spatial = 16  # Spatial binning dimension
+spatial = 8  # Spatial binning dimension
 hist_feat = True  # Histogram features on or off
-hist_bins = 16  # Number of histogram bins
+hist_bins = 32  # Number of histogram bins
 hog_feat = True  # HOG features on or off
 orient = 9  # HOG orientations
 pix_per_cell = 8  # HOG pixels per cell
@@ -52,6 +44,9 @@ X_train, X_test, y_train, y_test = train_test_split(
     scaled_X, y, test_size=0.2, random_state=rand_state)
 
 print('Using spatial binning of:', spatial, 'and', hist_bins, 'histogram bins')
+print('Using:', orient, 'orientations', pix_per_cell,
+      'pixels per cell and', cell_per_block, 'cells per block')
+
 print('Feature vector length:', len(X_train[0]))
 # Use a linear SVC
 model = LinearSVC()
