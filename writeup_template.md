@@ -1,13 +1,10 @@
 #Vehicle Detection Project
 
-The goals / steps of this project are the following:
-
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
-* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
-* Estimate a bounding box for vehicles detected.
+In this project, the goal is to establish a pipeline for the detection of vehicles on a video stream taken by a camera mounted on the dashboard of a car.
+The use of a provided training set of labeled images allowed to train a linear SVM classifier.
+To that end, a Histogram of Oriented Gradients (HOG) was combined with two other methods to extract a feature vector from the images.
+The sliding-window technique was then used in combination with the trained classifier to search for cars in the full dashcam frame.
+From there, after filtering for false positive and multiple detection, the bounding boxes of the detected cars are estimated and plotted on the original frame.
 
 [//]: # (Image References)
 [car]: output_images/training/445.png
@@ -19,15 +16,6 @@ The goals / steps of this project are the following:
 [heatmap_5]: ./output_images/heat/heatmap_test5.jpg
 [threshold_5]: ./output_images/heat/threshold_heatmap_test5.jpg
 [bbox_5]: ./output_images/heat/bbox_test5.jpg
-
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
 
 
 ## Classifier
@@ -56,7 +44,7 @@ one can still obtain decent classification result.
 By choosing a resolution of 8x8 pixels and the LUV color space, we genereate a feature vector of length 192.
 Training our model on the colormap features alone gives a testing accuracy of 87.9%
 
-The corresponding code is contained in the method `__bin_spatial` in the file `vehicle_detection/features.py`).  
+The corresponding code is contained in the method `__bin_spatial` in the file `vehicle_detection/features.py`.  
 
 #### Color histogram features
 
@@ -68,26 +56,26 @@ However, combined with other methods of feature extraction, using histograms can
 By taking 32 bins in the LUV colorspace, one obtains 96 features.
 By testing on the color histogram alone, the testing accuracy is of 91.9 percent.
 
-The corresponding code is contained in the method `__color_hist` in the file `vehicle_detection/features.py`).  
+The corresponding code is contained in the method `__color_hist` in the file `vehicle_detection/features.py`.  
 
 #### Histogram of Oriented Gradients (HOG) feature extraction
 
-The code for this step is contained in the method `__get_hog_features` in the file `vehicle_detection/features.py`).  
+The Histogram of Oriented gradient is a method used for object detection.
+In effect, presents some representation of the shape of an object in an image by calculating the gradient for each color channel in the x and y direction and then by putting the gradient orientation in an histogram.
+The algorithm is implemented in `skimage.hog()`.
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
-
-![alt text][image1]
-
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
-
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
-
-
-![alt text][image2]
+Here two examples of HOG transformations in the `LUV` color space using only the first channel and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(1, 1)`.
+The first image is the car example see above, while the second image is the non-car example.
 
 ![alt text][car_hog]
 
 ![alt text][not_car_hog]
+
+With those parameters, the feature vector length is 576 and the model has a testing accuracy of 94.5 percent.
+While the parameters were generally chosen for the best accuracy of the classifier, the number of cell per block was maintained at (1, 1).
+Extending this to (2, 2) does increase the accuracy of the classifier, but it also drastically slows down the speed of the feature computation.
+
+The code for this step is contained in the method `__get_hog_features` in the file `vehicle_detection/features.py`.  
 
 #### Feature scaling
 
@@ -149,7 +137,7 @@ Here is a few sample image with the search windows containing a car drawn.
 
 ![alt text][windows1]
 
-![alt text][windows3]
+![alt text][windows5]
 
 ## Heatmap and bounding boxes
 
