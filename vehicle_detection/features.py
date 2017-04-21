@@ -48,6 +48,9 @@ class FeatureExtractor:
                            visualise=vis, feature_vector=feature_vec)
             return features
 
+    def get_hog_features_for_plotting(self, img):
+        return self.__get_hog_features(img, vis=True, feature_vec=False)
+
     # Define a function to compute binned color features
     def __bin_spatial(self, img):
         # Use cv2.resize().ravel() to create the feature vector

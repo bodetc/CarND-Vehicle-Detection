@@ -5,6 +5,10 @@ import numpy as np
 from moviepy.editor import VideoFileClip
 
 
+def get_filename(path, separator='/'):
+    return path.split(separator)[-1]
+
+
 def load_training_images(folder='data'):
     # Read in car and non-car images
     cars = []

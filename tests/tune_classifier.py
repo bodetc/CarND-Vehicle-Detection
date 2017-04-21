@@ -4,9 +4,9 @@ import vehicle_detection.training
 from vehicle_detection.features import FeatureExtractor
 
 color_space = 'LUV'  # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
-spatial_feat = True  # Spatial features on or off
+spatial_feat = False  # Spatial features on or off
 spatial = 8  # Spatial binning dimension
-hist_feat = True  # Histogram features on or off
+hist_feat = False  # Histogram features on or off
 hist_bins = 32  # Number of histogram bins
 hog_feat = True  # HOG features on or off
 orient = 9  # HOG orientations

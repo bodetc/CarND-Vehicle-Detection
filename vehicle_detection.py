@@ -1,3 +1,4 @@
+import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 from sklearn.svm import LinearSVC
 
@@ -54,16 +55,40 @@ def process_image_heatmap(image):
     return draw_img
 
 
+savePlots = False
+
 images = load_test_images(folder='test_images')
 for file in images:
+    print(file)
+    filename = get_filename(file)
     image = load_image(file)
+
+    window_img = process_image_boxes(image)
+    plt.imshow(window_img)
+    plt.show()
+
+    cv2.imwrite('output_images/windows/' + filename, window_img)
 
     heat = Heat()
     heat.threshold = 3
-    window_img = process_image_heatmap(image)
-    plt.imshow(window_img)
-
+    heat_img = process_image_heatmap(image)
+    plt.imshow(heat_img)
     plt.show()
+    mpimg.imsave('output_images/heat/bbox_' + filename, heat_img)
 
+    if savePlots:
+        plt.imshow(heat.heatmap, cmap='hot')
+        plt.savefig('output_images/heat/heatmap_' + filename)
+        plt.show()
+
+        plt.imshow(heat.threshold_heatmap, cmap='hot')
+        plt.savefig('output_images/heat/threshold_heatmap_' + filename)
+        plt.show()
+
+plt.close()
+
+# Reset heatmap
 heat = Heat()
-process_video('project_video.mp4', 'tests/project_video.mp4', process_image_heatmap)
+
+# Process video
+process_video('project_video.mp4', 'output_videos/project_video.mp4', process_image_heatmap)

@@ -97,6 +97,7 @@ class WindowSearch:
             windows = WindowSearch.__slide_window(image, y_start_stop=y_start_stop, xy_window=(size, size))
             all_windows.extend(windows)
 
+        # Print number of windows on first run
         if self.n_windows is None:
             self.n_windows = len(all_windows)
             print('Searching a total of', self.n_windows, 'windows')
