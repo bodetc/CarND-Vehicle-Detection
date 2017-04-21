@@ -1,7 +1,7 @@
 import glob
 
+import cv2
 import numpy as np
-from matplotlib import image as mpimg
 from moviepy.editor import VideoFileClip
 
 
@@ -39,10 +39,8 @@ def load_test_images(folder='test_images'):
 
 def load_image(filename):
     # Read in each one by one
-    image = mpimg.imread(filename)
-    if '.png' in filename:
-        image *= 255.
-
+    image = cv2.imread(filename)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image
 
 
