@@ -66,7 +66,7 @@ for file in images:
     plt.imshow(window_img)
     plt.show()
 
-    cv2.imwrite('output_images/windows/' + filename, window_img)
+    mpimg.imsave('output_images/windows/' + filename, window_img)
 
     heat = Heat()
     heat.threshold = 3

@@ -91,13 +91,26 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 #### Feature scaling
 
+As the features extracted from different methods have different scaling, it is important to normalize the final feature vector to avoid having some feature strongly overweighting other.
+The `StandartScaler` provided by `sklearn` was used to provide a normalized feature vector.
+
 ### Model and training
 
-Once 
+Using the provided dataset, the images are first loaded and then transformed into feature vectors.
+Then, the feature vector is scaled using the `StandartScaler`.
+
+To prepare for training, the dataset is then split into a training and a testing set using `train_test_split` from `sklearn`.
+Twenty percent of the dataset is used for testing.
+
+The model itself was chosen as a linear SVM, as its performance is already sufficient for the purpose of this project.
+The model is then trained on the training set and its accuracy calculated on the testing set.
+
+The code for this section can be found in the file `vehicle_detection/training.py`.
 
 ### Parameters
 
 The final parameters for feature extraction where chosen to maximize the test accuracy of the linear SVM model on the testing data.
+The respective size of each feature vector and the computation time was also taken into account.
 The final parameters for each feature extraction method is presented above.
 
 Furthermore, the linear SVM model also has a `C` meta-parameter. This parameter can be used to prevent overfitting of the data.
@@ -161,9 +174,7 @@ The final result looks like this:
 
 The code for heatmap calculation can be found in `vehicle_detection/heat.py`
 
-## Video Implementation
-
-### Pipeline
+## Video Pipeline
 
 The video pipeline is nearly identical to the picture pipeline.
 The only difference is the inclusion of memory in the heatmap.
@@ -176,13 +187,23 @@ This provides additional stability towards false positive, as they happen only o
 
 The pipeline is called by the last line of `vehicle_detection.py`.
 
-### Video output
-
-Here's a [link to my video result](./tests/project_video.mp4).
-
 ##Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+Here's a [link to my video result](./tests/project_video.mp4).
+As one can see, the model successfully manages to identify the cars driving nearby.
+There is a very limited number of false positive, those are usually triggered by cars driving in the opposite direction.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+The bounding boxes are a bit jumpy. This is expected due to the discrete amount of sliding windows, which implies a limited amount of possible positions for bounding boxes.
 
+While this pipeline seems quite robust at identifying what is a car and where there, but it tends underestimate the size of the car.
+This effect can be reduced by lowering the heatmap threshold from 3 to 2, but this will also increase the number of false positives.
+
+Another solution might be to average not only the heatmap over several frames, but also the resulting bounding boxes.
+However, the resolution will always be limited by the discrete amount of search windows.
+It might be a better solution to merge the result of this pipeline with the output of other sensors which are better suited
+for the task, such as radar or lidar.
+The video pipeline would identify what are cars, and the other sensors would provide their precise location.
+
+Furthermore, the model was only trained using daytime images of cars.
+This means that the model might not be able to recognise cars in other situation, such as nighttime.
+It would also not be able to recognise other kind of objects that might be present on the road, such as motorbike, trucks or pedestrians.

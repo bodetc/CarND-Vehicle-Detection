@@ -13,7 +13,7 @@ hist_bins = 0  # Number of histogram bins
 hog_feat = True  # HOG features on or off
 orient = 9  # HOG orientations
 pix_per_cell = 8  # HOG pixels per cell
-cell_per_block = 2  # HOG cells per block
+cell_per_block = 1  # HOG cells per block
 hog_channel = 0  # Can be 0, 1, 2, or "ALL"
 
 feature_extractor = FeatureExtractor(color_space=color_space,
