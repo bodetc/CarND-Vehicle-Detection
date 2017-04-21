@@ -1,9 +1,4 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Vehicle Detection Project**
+#Vehicle Detection Project
 
 The goals / steps of this project are the following:
 
@@ -15,8 +10,10 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[car]: ./output_images/445.png
-[not_car]: ./output_images/extra8.png
+[car]: output_images/training/445.png
+[not_car]: output_images/training/extra8.png
+[car_hog]: output_images/hog/445.png
+[not_car_hog]: output_images/hog/extra8.png
 [windows1]: ./output_images/windows/test1.jpg
 [windows5]: ./output_images/windows/test5.jpg
 [heatmap_5]: ./output_images/heat/heatmap_test5.jpg
@@ -87,6 +84,10 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 
 ![alt text][image2]
+
+![alt text][car_hog]
+
+![alt text][not_car_hog]
 
 #### Feature scaling
 

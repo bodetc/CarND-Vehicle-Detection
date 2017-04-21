@@ -59,7 +59,6 @@ savePlots = False
 
 images = load_test_images(folder='test_images')
 for file in images:
-    print(file)
     filename = get_filename(file)
     image = load_image(file)
 

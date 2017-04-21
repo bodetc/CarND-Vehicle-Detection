@@ -3,3 +3,4 @@ data/non-vehicles/*
 data/vehicles/*
 
 **.mp4
+vehicle_detection/__pycache__/

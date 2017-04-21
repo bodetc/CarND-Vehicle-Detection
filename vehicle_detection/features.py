@@ -1,3 +1,5 @@
+# noinspection PyUnresolvedReferences
+import better_exceptions
 import cv2
 import numpy as np
 from skimage.feature import hog
@@ -48,8 +50,8 @@ class FeatureExtractor:
                            visualise=vis, feature_vector=feature_vec)
             return features
 
-    def get_hog_features_for_plotting(self, img):
-        return self.__get_hog_features(img, vis=True, feature_vec=False)
+    def get_hog_features_for_plotting(self, img, channel=0):
+        return self.__get_hog_features(img[:, :, channel], vis=True, feature_vec=True)
 
     # Define a function to compute binned color features
     def __bin_spatial(self, img):
